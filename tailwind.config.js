@@ -2,7 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
+    fontFamily: {
+      // Add your custom fonts and enjoy.
+      'Inter': ["Inter", "Sans-serif"]
+    },
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    // eslint-disable-next-line no-undef
+    require('tailwindcss-animated')
+  ],
 };
