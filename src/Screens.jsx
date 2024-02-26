@@ -41,7 +41,6 @@ export function StartScreen({ start }) {
 
     useEffect(() => {
         const cm = localStorage.getItem("game")
-
         if (!cm) return
         setGameMode(cm)
     },[])
