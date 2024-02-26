@@ -14,6 +14,7 @@ import { useTimer } from "react-timer-hook";
 import useSound from "use-sound";
 import hintSfx from "./assets/short-success-sound-glockenspiel-treasure-video-game-6346.mp3";
 import matchedStfx from "./assets/announcement-sound-4-21464.mp3";
+import gitMem from "../src/assets/brain.gif"
 
 export const possibleTileContents = [
   icons.GiHearts,
@@ -84,7 +85,7 @@ export function StartScreen({ start }) {
             Play
           </button>
           <img
-            src="../src/assets/brain.gif"
+            src={gitMem}
             alt="memory-animation"
             className="absolute right-[-40px] bottom-[-40px]"
           />
