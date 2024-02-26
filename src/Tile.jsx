@@ -1,5 +1,11 @@
+import useSound from 'use-sound';
+
+import boopSfx from '../src/assets/whoosh-transitions-sfx-03-118230.mp3';
+
 /* eslint-disable react/prop-types */
-export function Tile({ content: Content, flip, state, color }) {
+export function Tile({ content: Content, flip, state, color, hasSound }) {
+  const [play] = useSound(boopSfx, { volume: 0.25 });
+
   switch (state) {
     case "start":
       return (
@@ -7,7 +13,10 @@ export function Tile({ content: Content, flip, state, color }) {
           className={`inline-block h-12 w-12 ${
             color ? color : "bg-indigo-300"
           } text-center rounded-md cursor-pointer text-transparent`}
-          flip={flip}
+          flip={() => {
+            flip()
+            hasSound ? play() : null
+          }}
         />
       );
     case "flipped":
