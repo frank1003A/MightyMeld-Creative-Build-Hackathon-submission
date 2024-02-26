@@ -7,7 +7,6 @@ import Background from "./Background";
 import { FaBrain } from "react-icons/fa";
 import { PiClockCountdownFill } from "react-icons/pi";
 import Tippy from "@tippyjs/react";
-import ThemeSwitcher from "./ThemeSwitcher";
 import { AiFillSound } from "react-icons/ai";
 //
 import { useTimer } from "react-timer-hook";
@@ -90,9 +89,6 @@ export function StartScreen({ start }) {
             className="absolute right-[-40px] bottom-[-40px]"
           />
         </div>
-      </div>
-      <div className="absolute top-0 w-full h-[60px] flex items-center justify-between px-8">
-        <ThemeSwitcher />
       </div>
     </div>
   );
@@ -284,7 +280,6 @@ const gameMode = localStorage.getItem("game")
         </div>
             )
         }
-        <ThemeSwitcher />
       </div>
 
       <Background />
