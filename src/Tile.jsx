@@ -10,9 +10,7 @@ export function Tile({ content: Content, flip, state, color, hasSound }) {
     case "start":
       return (
         <Back
-          className={`inline-block h-12 w-12 ${
-            color ? color : "bg-indigo-300"
-          } text-center rounded-md cursor-pointer text-transparent`}
+          className={`inline-block h-12 w-12 ${color ? color : "bg-indigo-300"} text-center rounded-md cursor-pointer text-transparent`}
           flip={() => {
             flip()
             hasSound ? play() : null
