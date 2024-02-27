@@ -15,6 +15,7 @@ import useSound from "use-sound";
 import hintSfx from "./assets/short-success-sound-glockenspiel-treasure-video-game-6346.mp3";
 import matchedStfx from "./assets/announcement-sound-4-21464.mp3";
 import gitMem from "../src/assets/brain.gif"
+import clkSfx from "./assets/mouse-click-153941.mp3"
 
 export const possibleTileContents = [
   icons.GiHearts,
@@ -29,14 +30,16 @@ export const possibleTileContents = [
   icons.GiOpenBook,
 ];
 
-const randNum = Math.floor(Math.random() * 16);
-
 export function StartScreen({ start }) {
     const [gameMode, setGameMode ] = useState("normal")
+    const [clickSound ] = useSound(clkSfx, {
+        volume: "0.15",
+      });
 
     const handleGameMode = (mode) => {
         setGameMode(mode)
         localStorage.setItem("game", mode)
+        clickSound()
     }
 
     useEffect(() => {
@@ -79,7 +82,10 @@ export function StartScreen({ start }) {
           </div>
 
           <button
-            onClick={start}
+            onClick={() => {
+                start();
+                clickSound()
+            }}
             className="text-white p-3 cursor-pointer bg-pink-500 py-[6px] px-10 mt-[14px] rounded-full bg-gradient-to-b from-pink-400 to-pink-600 shadow-xl hover:scale-105 transition-all animate-fade-up"
           >
             Play
@@ -95,7 +101,7 @@ export function StartScreen({ start }) {
   );
 }
 
-export function PlayScreen({ end }) {
+export function PlayScreen({ end, hasSound, toggleSound }) {
   const time = new Date();
   const expiryTimestamp1Minute = new Date(time.getTime() + 1 * 60000);
 const gameMode = localStorage.getItem("game")
@@ -116,8 +122,7 @@ const gameMode = localStorage.getItem("game")
   const [hint, setHint] = useState(null);
   const [showHint, setShowHint] = useState(false);
 
-  const [hasSound, setSound] = useState(true);
-
+  const [randNum, setRandNum] = useState(null)
   const [hintSound, { stop: hintSoundStop }] = useSound(hintSfx, {
     volume: "0.25",
   });
@@ -125,6 +130,32 @@ const gameMode = localStorage.getItem("game")
   const [cheer, { stop: cheerSoundStop }] = useSound(matchedStfx, {
     volume: "0.25",
   });
+
+  const [clickSound ] = useSound(clkSfx, {
+    volume: "0.15",
+  });
+
+
+useEffect(() => {
+    const generateRandIndex = () => {
+        if (!tiles || tiles.length === 0) return null;
+        
+        const notFlippedIndices = tiles.reduce((acc, tile, index) => {
+            if (tile.state !== "flipped" && tile.state !== "matched") {
+                acc.push(index);
+            }
+            return acc;
+        }, []);
+    
+        if (notFlippedIndices.length === 0) return null;
+    
+        let randomIndex = Math.floor(Math.random() * notFlippedIndices.length);
+        return notFlippedIndices[randomIndex]; 
+    };
+    
+    let randomNumber = generateRandIndex();
+    setRandNum(randomNumber)
+  }, [tiles]);
 
   // useEffect to update hintIndex based on flipped tiles
   useEffect(() => {
@@ -303,7 +334,7 @@ const gameMode = localStorage.getItem("game")
             <Tile
               key={i}
               color={
-                showHint && hint !== null && (i === hint || i === randNum)
+                showHint && hint !== null && (i ===hint || i ===  randNum)
                   ? "bg-green-500"
                   : null
               }
@@ -317,7 +348,10 @@ const gameMode = localStorage.getItem("game")
       <div className="flex w-fit gap-4 h-fit flex items-center justify-evenly mt-10">
         <Tippy content="No Booster">
           <button
-            onClick={() => setShowHint(false)}
+            onClick={() => {
+                setShowHint(false); 
+                clickSound()
+            }}
             className={`${
               !showHint || showHint === false
                 ? "text-indigo-500 "
@@ -330,7 +364,9 @@ const gameMode = localStorage.getItem("game")
         <div className="h-full min-h-[1em] w-px self-stretch bg-[#eee]" />
         <Tippy content="Hint Booster">
           <button
-            onClick={() => setShowHint(true)}
+            onClick={() => {
+                setShowHint(true); clickSound()
+            }}
             className={`${
               showHint && showHint === true
                 ? "text-indigo-500 "
@@ -343,7 +379,10 @@ const gameMode = localStorage.getItem("game")
         <div className="h-full min-h-[1em] w-px self-stretch bg-[#eee]" />
         <Tippy content={hasSound ? "Sound Off" : "Sound On"}>
           <button
-            onClick={() => setSound(!hasSound)}
+            onClick={() => {
+                toggleSound()
+                clickSound();
+            }}
             className={`${
               hasSound && hasSound === true
                 ? "text-indigo-500 "
